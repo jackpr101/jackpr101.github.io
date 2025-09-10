@@ -222,7 +222,7 @@ body {
     .main-nav.active { display: block; }
     .main-nav ul { flex-direction: column; width: 100%; }
     .main-nav ul li { margin: 0; text-align: center;  }
-    .main-nav ul li a { display: block; padding: 0.5rem; color: #9b9b9b}
+    .main-nav ul li a { display: block; padding: 0.1rem; color: #9b9b9b}
     .hamburger-menu { display: flex; }
     .hamburger-menu.active .hamburger-bar:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
     .hamburger-menu.active .hamburger-bar:nth-child(2) { opacity: 0; }
