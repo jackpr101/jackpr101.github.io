@@ -136,6 +136,11 @@ body {
 .main-header.scrolled .logo-default { opacity: 1; }
 .main-header.scrolled .logo-white { opacity: 0; }
 
+/* NEW: When scrolled, make the dropdown menu background white */
+.main-header.scrolled .main-nav {
+    background-color: rgba(255,255,255,0.95);
+}
+
 
 /* ================================== */
 /* HERO & CONTENT SECTIONS            */
