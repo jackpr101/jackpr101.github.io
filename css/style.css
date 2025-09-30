@@ -141,6 +141,14 @@ body {
     background-color: rgba(255,255,255,0.95);
 }
 
+/* ===============EXCEL EMBED=================== */
+/* Center the iframe horizontally */
+.iframe-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
 
 /* ================================== */
 /* HERO & CONTENT SECTIONS            */
