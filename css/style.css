@@ -17,11 +17,39 @@ body {
     padding-top: 15px; /* Adjust to match header height */
 }
 
+/* ================================== */
+/* STICKY FOOTER SOLUTION             */
+/* ================================== */
+
+/* Make the body at least the full height of the viewport */
+body {
+    min-height: 100vh; /* vh stands for "viewport height" */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Make the main content area grow to fill any available space */
+main {
+    flex: 1 0 auto; /* This is the key instruction! */
+}
 
 .container {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+/* Style for elements before they are animated */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Style for elements when they become visible */
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ================================== */
@@ -203,7 +231,6 @@ body {
 .feature-text { flex: 1; }
 .feature-image { flex: 1; }
 .feature-image img { max-width: 100%; height: auto; border-radius: 8px; }
-.main-footer { background: #333; color: #fff; text-align: center; padding: 20px 0; margin-top: 60px; }
 .hamburger-menu { display: none; flex-direction: column; justify-content: space-around; width: 30px; height: 25px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 10; }
 .hamburger-bar { width: 30px; height: 3px; background-color: #fff; border-radius: 5px; transition: all 0.3s ease-in-out; }
 .btn:hover { background-color: #0056b3; transform: translateY(-2px); transition: all 0.2s ease; }
@@ -212,13 +239,81 @@ body {
 .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
 .form-group textarea { resize: vertical; }
-.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: left; padding: 40px 20px; }
-.footer-column h4 { margin-top: 0; margin-bottom: 10px; font-size: 1.2rem; color: #fff; }
-.footer-column p, .footer-column ul { margin: 0; padding: 0; list-style: none; color: #ccc; }
-.footer-column a { color: #ccc; text-decoration: none; }
-.footer-column a:hover { color: #fff; text-decoration: underline; }
+
+/* ================================== */
+/* FOOTER                             */
+/* ================================== */
+
+/* Main footer container */
+.main-footer {
+    background-color: #090A0F; /* Match the dark hero background for cohesion */
+    color: #ccc;
+    padding: 20px 0 0; /* Add padding to the top, bottom padding will be on the .footer-bottom */
+    margin-top: 60px;
+    border-top: 1px solid #222; /* Subtle top border to separate from page content */
+    font-size: 0.9rem;
+}
+/* Grid for the main content */
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Responsive columns */
+    gap: 30px;
+    padding-bottom: 10px;
+    text-align: left;
+}
+.footer-column .logo-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+.footer-column .logo-footer img {
+    height: 40px;
+}
+.footer-tagline {
+    margin: 0;
+    color: #888;
+}
+.footer-column h4 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-links li {
+    margin-bottom: 10px;
+}
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.footer-links a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+/* Bottom bar for copyright */
+.footer-bottom {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #222;
+    font-size: 0.8rem;
+    color: #888;
+}
+.footer-bottom p {
+    margin: 0;
+}
+
 @media (max-width: 900px) {
-    .footer-grid { grid-template-columns: 1fr; }
     .main-nav { display: none; position: absolute; top: 86px; left: 0; width: 100%; background-color: rgba(255,255,255,0); backdrop-filter: blur(10px); transition: background-color 0.4s ease;   }
     .main-nav.active { display: block; }
     .main-nav ul { flex-direction: column; width: 100%; }
