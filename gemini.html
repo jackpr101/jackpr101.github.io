@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investments - Jacent Labs</title>
+    
+    <!-- Links to your existing website's stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon and manifest links from your site -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Jacent Labs" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Scripts required for the portfolio explorer app -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A single-page dashboard designed for intuitive exploration. It begins with a concise 'About' section for context. The core is an interactive portfolio viewer featuring a primary bar chart comparing holding values, backed by a detailed, sortable table. A dedicated panel provides more information on a user-selected company. This layered structure (overview -> comparison -> detail) guides the user from a high-level understanding to specific insights, enhancing usability over a static report format. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: IP Group Business Model -> Goal: Inform -> Viz/Presentation Method: Text Block -> Interaction: Static -> Justification: Provides essential context before data exploration. -> Library/Method: HTML.
+        - Report Info: Top 10 Holdings by Value -> Goal: Compare -> Viz/Presentation Method: Horizontal Bar Chart -> Interaction: Hover for tooltips, highlights on table click -> Justification: Excellent for visually comparing the magnitude of different holdings. -> Library/Method: Chart.js/Canvas.
+        - Report Info: Detailed Holding Data (Value, Ownership, etc.) -> Goal: Organize/Inform -> Viz/Presentation Method: Sortable Table -> Interaction: Click headers to sort, click rows to select -> Justification: Provides precise data points and allows users to reorder information based on their interest. -> Library/Method: HTML + JS.
+        - Report Info: Selected Company Details -> Goal: Inform -> Viz/Presentation Method: Dynamic Text Panel -> Interaction: Updates on row/chart click -> Justification: Offers detailed context without cluttering the main dashboard view (details on demand). -> Library/Method: HTML + JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        /* Styles specific to the portfolio explorer components */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .table-sortable th {
+            cursor: pointer;
+            position: relative;
+        }
+        .table-sortable th:after {
+            content: ' ';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            margin-top: -5px;
+            border-width: 5px 5px 0 5px;
+            border-style: solid;
+            border-color: #cbd5e1 transparent transparent transparent;
+            opacity: 0.5;
+        }
+        .table-sortable th.sort-asc:after {
+            border-width: 0 5px 5px 5px;
+            border-color: transparent transparent #2563eb transparent;
+            opacity: 1;
+        }
+        .table-sortable th.sort-desc:after {
+            border-width: 5px 5px 0 5px;
+            border-color: #2563eb transparent transparent transparent;
+            opacity: 1;
+        }
+        .selected-row {
+            background-color: #eff6ff;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header copied from your about.html -->
+    <header class="main-header scrolled">
+        <div class="container">
+            <a href="/index" class="logo">
+                <img src="images/logo.png" alt="Jacent Labs Logo" class="logo-image logo-default">
+                <img src="images/logo-white.png" alt="Jacent Labs Logo" class="logo-image logo-white">
+                Jacent Labs
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/science">Science</a></li>
+                    <li><a href="/investments">Investments</a></li>
+                    <li><a href="/gemini">IP Group Tracker</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger-menu">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="content-section">
+            <div class="container">
+                <h1 style="text-align: center; font-size: 3rem; margin-top: 3rem;">Our Investment Portfolio Explorer</h1>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 40px auto;">
+                    As part of our mission, we strategically invest in pioneering companies that align with our vision for the future of science and technology. This interactive dashboard provides an overview of our key holdings, showcasing the innovative businesses we support.
+                </p>
+
+                <!-- Portfolio Explorer App Content -->
+                <div class="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-200">
+                    <h2 class="text-2xl font-semibold mb-3">About IP Group</h2>
+                    <p class="text-slate-600">IP Group is a leading intellectual property commercialisation company that focuses on evolving great ideas into world-changing businesses. They partner with universities, research institutions, and entrepreneurs to create and build high-growth companies based on disruptive science and technology. Their portfolio spans across life sciences, technology, and cleantech sectors, supporting innovative ventures from seed stage through to maturity.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                        <h2 class="text-2xl font-semibold mb-1">Top Holdings by Fair Value</h2>
+                        <p class="text-slate-500 mb-4 text-sm">Click a company in the chart or table to see more details.</p>
+                        <div class="chart-container">
+                            <canvas id="holdingsChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="details-panel" class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md h-fit border border-gray-200">
+                        <h2 class="text-2xl font-semibold mb-3">Company Details</h2>
+                        <div id="details-content" class="text-slate-600">
+                            <p>Select a company from the chart or table to see more details and generate insights here.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md mt-8 border border-gray-200">
+                    <h2 class="text-2xl font-semibold mb-4">Portfolio Holdings Details</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 table-sortable">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-sort="name">Company</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-sort="value">Fair Value (£m)</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-sort="ownership">Ownership (%)</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-sort="portfolio">Portfolio (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="holdings-table-body" class="bg-white divide-y divide-gray-200">
+                                <!-- Rows will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- End of Portfolio Explorer App Content -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer copied from your about.html -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <a href="/index" class="logo-footer">
+                        <img src="images/logo-white.png" alt="Jacent Labs Logo">
+                        Jacent Labs
+                    </a>
+                    <p class="footer-tagline">DNA made easy.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/science">Science</a></li>
+                        <li><a href="/investments">Investments</a></li>
+                        <li><a href="/gemini">IP Group Tracker</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@jacentlabs.com">contact@jacentlabs.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Jacent Labs Ltd. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Your website's main script for things like the hamburger menu -->
+    <script src="js/script.js"></script>
+
+    <!-- The script for the portfolio explorer app -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const portfolioData = [
+                { id: 'oxfordnanopore', name: 'Oxford Nanopore', value: 317.1, ownership: 10.1, portfolio: 28.8, sector: 'Life Sciences', description: 'Pioneers in DNA/RNA sequencing technology, providing real-time, long-read, and high-throughput analysis solutions.' },
+                { id: 'hingehealth', name: 'Hinge Health', value: 85.6, ownership: 3.5, portfolio: 7.8, sector: 'Life Sciences', description: 'A digital health company offering solutions for musculoskeletal (MSK) conditions like back and joint pain through wearable sensors and health coaching.' },
+                { id: 'featurespace', name: 'Featurespace', value: 50.8, ownership: 23.9, portfolio: 4.6, sector: 'Technology', description: 'A leader in enterprise financial crime prevention for fraud and anti-money laundering, using Adaptive Behavioral Analytics.' },
+                { id: 'firstlightfusion', name: 'First Light Fusion', value: 45.1, ownership: 17.7, portfolio: 4.1, sector: 'Cleantech', description: 'Researching a new form of nuclear fusion that is simpler, cheaper, and cleaner, based on a unique projectile-based approach.' },
+                { id: 'istomolecular', name: 'Istesso Molecular', value: 45.0, ownership: 58.2, portfolio: 4.1, sector: 'Life Sciences', description: 'A drug discovery and development company focused on creating novel treatments for autoimmune diseases and cancer.' },
+                { id: 'diatech', name: 'Dia-Tech', value: 44.9, ownership: 20.0, portfolio: 4.1, sector: 'Life Sciences', description: 'Developing innovative diagnostic technologies to improve the speed and accuracy of disease detection.'},
+                { id: 'psimotif', name: 'PSiMotif', value: 41.2, ownership: 33.3, portfolio: 3.7, sector: 'Technology', description: 'A semiconductor company specializing in the design of advanced power and control integrated circuits.'},
+                { id: 'cerespower', name: 'Ceres Power', value: 38.6, ownership: 3.9, portfolio: 3.5, sector: 'Cleantech', description: 'A global leader in solid oxide fuel cell (SOFC) and electrochemical technology for power generation and hydrogen production.' },
+                { id: 'garrison', name: 'Garrison', value: 35.8, ownership: 21.0, portfolio: 3.3, sector: 'Technology', description: 'Provides ultra-secure web browsing technology that prevents cyber-attacks by isolating web content from the user\'s local network.' },
+                { id: 'atg', name: 'ATG', value: 31.0, ownership: 15.0, portfolio: 2.8, sector: 'Technology', description: 'A global technology company that operates marketplaces for curated online auctions.' }
+            ];
+
+            const tableBody = document.getElementById('holdings-table-body');
+            const detailsContent = document.getElementById('details-content');
+            let currentSort = { key: 'value', direction: 'asc' };
+            let holdingsChart;
+            
+            function sortData(key) {
+                const direction = (currentSort.key === key && currentSort.direction === 'asc') ? 'desc' : 'asc';
+                currentSort = { key, direction };
+                
+                portfolioData.sort((a, b) => {
+                    const valA = a[key];
+                    const valB = b[key];
+                    if (typeof valA === 'string') {
+                        return direction === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    }
+                    return direction === 'asc' ? valA - valB : valB - valA;
+                });
+
+                renderTable();
+                updateChart();
+                updateSortHeaders();
+            }
+
+            function updateSortHeaders() {
+                document.querySelectorAll('.table-sortable th').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                    if (th.dataset.sort === currentSort.key) {
+                        th.classList.add(`sort-${currentSort.direction}`);
+                    }
+                });
+            }
+
+            function renderTable() {
+                tableBody.innerHTML = '';
+                portfolioData.forEach(company => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50 cursor-pointer';
+                    row.dataset.id = company.id;
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${company.name}</div>
+                            <div class="text-xs text-gray-500">${company.sector}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">${company.value.toFixed(1)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">${company.ownership.toFixed(1)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">${company.portfolio.toFixed(1)}</td>
+                    `;
+                    row.addEventListener('click', () => selectCompany(company.id));
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function selectCompany(companyId, fromChart = false) {
+                const company = portfolioData.find(c => c.id === companyId);
+                if (!company) return;
+
+                detailsContent.innerHTML = `
+                    <h3 class="text-xl font-bold text-slate-800">${company.name}</h3>
+                    <p class="text-sm text-slate-500 mb-4">${company.sector}</p>
+                    <p class="mb-4">${company.description}</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between border-b pb-1"><span>Fair Value:</span><span class="font-semibold">£${company.value.toFixed(1)}m</span></div>
+                        <div class="flex justify-between border-b pb-1"><span>Ownership:</span><span class="font-semibold">${company.ownership.toFixed(1)}%</span></div>
+                        <div class="flex justify-between"><span>% of Portfolio:</span><span class="font-semibold">${company.portfolio.toFixed(1)}%</span></div>
+                    </div>
+                    <div class="mt-6">
+                        <button id="outlook-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full flex items-center justify-center transition-colors">
+                            Generate Strategic Outlook ✨
+                        </button>
+                        <div class="flex justify-center mt-4">
+                            <div id="loader" class="loader hidden"></div>
+                        </div>
+                        <div id="outlook-content" class="mt-4 text-slate-600 bg-slate-50 p-3 rounded-lg"></div>
+                    </div>
+                `;
+
+                document.getElementById('outlook-button').addEventListener('click', () => generateOutlook(company));
+                
+                document.querySelectorAll('#holdings-table-body tr').forEach(row => {
+                    row.classList.toggle('selected-row', row.dataset.id === companyId);
+                });
+
+                if (!fromChart) {
+                    highlightChartBar(companyId);
+                }
+            }
+            
+            async function generateOutlook(company) {
+                const outlookButton = document.getElementById('outlook-button');
+                const outlookContent = document.getElementById('outlook-content');
+                const loader = document.getElementById('loader');
+
+                outlookButton.disabled = true;
+                outlookButton.classList.add('opacity-50', 'cursor-not-allowed');
+                outlookContent.innerHTML = '';
+                loader.classList.remove('hidden');
+
+                const systemPrompt = "Act as a world-class financial analyst specializing in technology and life sciences investments. Provide a concise, forward-looking strategic outlook for the specified company. Focus on potential opportunities and challenges based on its sector and description. Your response should be a single, well-written paragraph.";
+                const userQuery = `Generate a strategic outlook for ${company.name}, a company in the ${company.sector} sector. Description: ${company.description}`;
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    },
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        outlookContent.innerHTML = `<p class="text-sm mt-2">${candidate.content.parts[0].text}</p>`;
+                    } else {
+                        throw new Error("Invalid response structure from API.");
+                    }
+                } catch (error) {
+                    console.error("Error generating outlook:", error);
+                    outlookContent.innerHTML = `<p class="text-sm mt-2 text-red-500">Could not generate outlook. Please try again later.</p>`;
+                } finally {
+                    loader.classList.add('hidden');
+                    outlookButton.disabled = false;
+                    outlookButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+
+            function highlightChartBar(companyId) {
+                const company = portfolioData.find(c => c.id === companyId);
+                if (!company) return;
+                const companyIndex = holdingsChart.data.labels.indexOf(company.name);
+                
+                holdingsChart.data.datasets.forEach(dataset => {
+                     dataset.backgroundColor = dataset.data.map((_, i) => i === companyIndex ? '#2563eb' : '#60a5fa');
+                     dataset.borderColor = dataset.data.map((_, i) => i === companyIndex ? '#1e40af' : '#3b82f6');
+                });
+                holdingsChart.update();
+            }
+
+            function updateChart() {
+                if (!holdingsChart) return;
+                const sortedForChart = [...portfolioData].sort((a,b) => b.value - a.value);
+                holdingsChart.data.labels = sortedForChart.map(c => c.name);
+                holdingsChart.data.datasets[0].data = sortedForChart.map(c => c.value);
+                holdingsChart.update();
+            }
+
+            function createChart() {
+                const ctx = document.getElementById('holdingsChart').getContext('2d');
+                const initialSortedData = [...portfolioData].sort((a,b) => b.value - a.value);
+
+                holdingsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: initialSortedData.map(c => c.name),
+                        datasets: [{
+                            label: 'Fair Value (£m)',
+                            data: initialSortedData.map(c => c.value),
+                            backgroundColor: '#60a5fa',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => `£${context.parsed.x.toFixed(1)}m`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { beginAtZero: true, title: { display: true, text: 'Fair Value (£m)' }},
+                            y: { ticks: { autoSkip: false }}
+                        },
+                        onClick: (event, elements) => {
+                           if (elements.length > 0) {
+                                const label = holdingsChart.data.labels[elements[0].index];
+                                const company = portfolioData.find(c => c.name === label);
+                                if (company) selectCompany(company.id, true);
+                           }
+                        }
+                    }
+                });
+            }
+
+            document.querySelectorAll('.table-sortable th').forEach(th => {
+                th.addEventListener('click', () => {
+                    sortData(th.dataset.sort);
+                });
+            });
+
+            sortData('value');
+            createChart();
+            selectCompany(portfolioData[0].id);
+        });
+    </script>
+</body>
+</html>
+
