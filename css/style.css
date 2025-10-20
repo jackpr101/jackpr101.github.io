@@ -1,4 +1,3 @@
-/* Add this new rule at the very top */
 html {
     overflow-y: scroll;
 }
@@ -21,16 +20,16 @@ body {
 /* STICKY FOOTER SOLUTION             */
 /* ================================== */
 
-/* Make the body at least the full height of the viewport */
+/* Makes the body at least the full height of the viewport */
 body {
     min-height: 100vh; /* vh stands for "viewport height" */
     display: flex;
     flex-direction: column;
 }
 
-/* Make the main content area grow to fill any available space */
+/* main content area growth to fill any available space */
 main {
-    flex: 1 0 auto; /* This is the key instruction! */
+    flex: 1 0 auto; /* key instruction! */
 }
 
 .container {
@@ -115,7 +114,7 @@ main {
     color: #fff; /* Default link color is white */
     transition: color 0.4s ease;
 }
-/* NEW: Hover effect for the transparent header state */
+/* Hover effect for the transparent header state */
 .main-header .main-nav ul li a:hover {
     color: #97c9ff; /* Makes the white text turn a subtle light grey on hover */
 }
@@ -215,21 +214,18 @@ main {
 /* RESPONSIVE STYLES (Media Query)    */
 /* ================================== */
 @media (max-width: 768px) {
-    /* ... all your responsive styles here ... */
+    /* ... all responsive styles here ... */
 }
 
-/* You will need to re-add your other styles for buttons, forms, footers etc. here.
-   The provided snippet focuses on fixing the header, but all your other rules should be
-   pasted back into their logical sections. */
+/* other styles for buttons, forms, footers etc.*/
 
-/* (For your convenience, I am pasting the rest of your CSS below this comment, but the fix is all in the code above) */
 .btn { display: inline-block; background: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; font-size: 1rem; }
 .content-section h2 { text-align: center; margin-top: 0px; margin-bottom: 40px; font-size: 2.5rem; }
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center; }
 .bg-light { background: #f9f9f9; }
 .feature-row { display: flex; align-items: center; gap: 100px; padding: 20px 0; }
-.feature-text { flex: 1; }
-.feature-image { flex: 1; }
+.feature-text { flex: 1; padding-left: 80px;}
+.feature-image { flex: 1; display: flex; justify-content: center; align-items: center;}
 .feature-image img { max-width: 100%; height: auto; border-radius: 8px; }
 .centered-image {
     display: block;
