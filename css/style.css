@@ -328,6 +328,7 @@ main {
     .hamburger-menu.active .hamburger-bar:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
     .grid { grid-template-columns: 1fr; }
     .feature-row { flex-direction: column; }
+    .feature-text {padding-right: 60px;}
     .main-header.scrolled .main-nav {
         background-color: rgba(255,255,255,0.95);
     }
