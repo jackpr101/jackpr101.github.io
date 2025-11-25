@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     const ctx = canvas.getContext('2d');
 
-    // --- DEBOUNCE HELPER FUNCTION --- (No change from original)
+    // --- DEBOUNCE HELPER FUNCTION --- 
     function debounce(func, delay) {
         let timeout;
         return function(...args) {
@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    // --- CAPABILITY DETECTION --- (No change from original)
+    // --- CAPABILITY DETECTION --- 
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-    // --- CONFIGURATION --- (No change from original)
+    // --- CONFIGURATION --- 
     const maxStarSize = 8;
     const minStarSize = 4; 
     const numStars = 3000;
@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const starColors = ['#FFFFFF', '#B0C4DE', '#F5DEB3', '#FFFFE0', '#ffbbbbff'];
     
-    // --- CHANGED: DATA STRUCTURE FOR BATCHING ---
-    // Instead of one big array, we now use a Map to group stars by their color.
-    // This is the foundation of the batch drawing optimization.
+    // --- DATA STRUCTURE FOR BATCHING ---
+    // Instead of one big array, a Map is used to group stars by their color.
+    // Foundation of the batch drawing optimization.
     let starsByColor = new Map();
     starColors.forEach(color => starsByColor.set(color, []));
     
     let mouseX = 0;
     let mouseY = 0;
-    // --- ADDED: For Page Visibility API ---
+    // --- For Page Visibility API ---
     let animationFrameId;
 
     function resizeCanvas() {
@@ -59,21 +59,20 @@ document.addEventListener('DOMContentLoaded', function () {
         star.z = visualWidth;
         star.size = Math.random() * (maxStarSize - minStarSize) + minStarSize;
         star.speed = Math.random() * (maxStarSpeed - minStarSpeed) + minStarSpeed;
-        // NOTE: The color is now assigned in initializeStars, not here.
     }
     
-    // --- CHANGED: INITIALIZATION FOR BATCHING ---
+    // --- INITIALIZATION FOR BATCHING ---
     function initializeStars() {
-        // First, clear all the arrays in our map to start fresh.
+        // Clears all the arrays in map to start fresh.
         starsByColor.forEach(arr => arr.length = 0);
 
-        // Now, create the stars and put them directly into their correct color group.
+        // Creates the stars and puts them directly into their correct color group.
         for (let i = 0; i < numStars; i++) {
             const color = starColors[Math.floor(Math.random() * starColors.length)];
             let star = {};
-            resetStar(star); // Get the position, size, and speed
+            resetStar(star); // Gets the position, size, and speed
             star.z = Math.random() * canvas.parentElement.offsetWidth;
-            // Add the fully formed star to the array associated with its color
+            // Adds the fully formed star to the array associated with its color
             starsByColor.get(color).push(star);
         }
     }
@@ -99,17 +98,14 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.clearRect(0, 0, visualWidth, visualHeight);
         ctx.translate(vanishingPointX, vanishingPointY);
         
-        // --- CHANGED: THE BATCH DRAWING LOOP ---
-        // Instead of one loop through all stars, we now have an outer loop for each color
-        // and an inner loop for the stars of that color. This is the core optimization.
+        // --- THE BATCH DRAWING LOOP ---
+        // Instead of one loop through all stars, there is an outer loop for each color
+        // and an inner loop for the stars of that color.
         for (const [color, stars] of starsByColor.entries()) {
-            
             // Set the color ONCE for this entire group of stars.
             ctx.fillStyle = color;
-            
             // Begin a single path for all stars of this color.
             ctx.beginPath();
-
             // Inner loop to process and draw each star of this color.
             for (let i = 0; i < stars.length; i++) {
                 const star = stars[i];
@@ -130,12 +126,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     const finalAlpha = 0.7 + (distanceFactor * 0.3);
 
                     ctx.globalAlpha = Math.min(finalAlpha, 1.0);
-                    // Instead of filling immediately, we add the star's shape to the current path.
+                    // Instead of filling immediately, the star's shape is added to the current path.
                     ctx.moveTo(px, py);
                     ctx.arc(px, py, finalSize / 2, 0, Math.PI * 2);
                 }
             }
-            // After adding all stars of this color to the path, we fill them all in a single command.
+            // After adding all stars of this color to the path, they are filled in with a single command.
             ctx.fill();
         }
         ctx.globalAlpha = 1;
@@ -143,12 +139,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function animate() {
         draw();
-        // --- CHANGED: Store the animation frame ID ---
+        // --- Store the animation frame ID ---
         animationFrameId = requestAnimationFrame(animate);
     }
     
-    // --- ADDED: PAGE VISIBILITY API FOR PERFORMANCE ---
-    // This pauses the animation when the tab is not visible. It's a standard optimization.
+    // --- PAGE VISIBILITY API FOR PERFORMANCE ---
+    // This pauses the animation when the tab is not visible.
     document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
             cancelAnimationFrame(animationFrameId);
