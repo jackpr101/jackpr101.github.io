@@ -1,145 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jacent Labs Ltd</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Jacent Labs" />
-    <link rel="manifest" href="/site.webmanifest" />
-</head>
-<body class="homepage">
-<header class="main-header">
-        <div class="container">
-            <a href="/index" class="logo">
-                <img src="images/logo.png" alt="Jacent Labs Logo" class="logo-image logo-default">
-                <img src="images/logo-white.png" alt="Jacent Labs Logo" class="logo-image logo-white">
-                Jacent Labs
-            </a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="/software">Software</a></li>
-                    <li><a href="/investments">Investments</a></li>
-                    <li><a href="/about">About Us</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </nav>
-            <button class="hamburger-menu">
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-            </button>
-        </div>
-    </header>
+layout: default
+title: Jacent Labs Ltd
+body_class: homepage
+<section class="hero">
+    <canvas id="starfield"></canvas> 
+    <div class="hero-content">
+        <h1>We are Jacent Labs</h1>
+        <p>DNA made Easy.</p>
+        <a href="/about" class="btn">Learn More</a>
+    </div>
+</section>
 
-    <main>
-        <section class="hero">
-            <canvas id="starfield"></canvas> 
-            <div class="hero-content">
-                <h1>We are Jacent Labs</h1>
-                <p>DNA made Easy.</p>
-                <a href="\about" class="btn">Learn More</a>
-            </div>
-        </section>
-
-        <section class="content-section animate-on-scroll">
-            <div class="container">
-                <h2>Our Approach</h2>
-                <div class="grid">
-                    <div class="grid-item">
-                        <h3>Discover</h3>
-                        <p>Identify novel approaches to predict disease, allowing you to unearth <b>critical motifs</b> and hidden <b>regulatory elements</b> 
-                            in your genomic sequences. Go from raw data to actionable biological insights with <b>unparalleled speed </b>and <b>precision</b>.</p>
-                    </div>
-                    <div class="grid-item">
-                        <h3>Develop</h3>
-                        <p>Our dream is continuously develop a comprehensive <b>end-to-end analysis pipeline</b> for analysing genomic data, supporting you to build robust 
-                            <b>hypotheses</b> supported by <b>powerful algorithms</b>, <b>detailed exports</b>, and an intuitive, <b>graphical interface</b>.</p>
-                    </div>
-                    <div class="grid-item">
-                        <h3>Deploy</h3>
-                        <p>Comprehensive analysis gives you the power to seamlessly integrate your findings into <b>existing research workflows</b>, accelerating discoveries 
-                            and translating them into tangible progress in <b>genomics</b>, <b>gene therapy</b>, and <b>personalized medicine</b>. </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-section bg-light animate-on-scroll">
-            <div class="container">
-                <h2>Key Features</h2>
-                <div class="feature-row">
-                    <div class="feature-text">
-                        <h3>Motif Analysis</h3>
-                        <p>Scan for <b>Microsatellites, Palindromes, G-Quadruplexes, CpG Islands</b>, and <b>Custom Sequences</b>. <br>Compare Categories. No limit to genetic sequence count.</p>
-                    </div>
-                    <div class="feature-image">
-                        <img src="images/analysis.png" alt="Feature Image">
-                    </div>
-                </div>
-                <div class="feature-row">
-                    <div class="feature-text">
-                        <h3>API Integration</h3>
-                        <p><b>NCBI Entrez API</b> attached, allowing on the fly gene analysis. Pulls gene data from Genomic Sequence ID, e.g., NC_045512.2.
-                            <br>AI LLM API inclusion, allowing for quick genomic questions.
-                        </p>
-                    </div>
-                    <div class="feature-image">
-                        <img src="images/ncbi.png" alt="Feature Image">
-                    </div>
-                </div>
-                <div class="feature-row">
-                    <div class="feature-text">
-                        <h3>File Flexibility</h3>
-                        <p>Data can be easily <b>extracted</b> into <b>.csv</b> format. <br>Custom Motif files can be <b>uploaded</b>, alongside being created within the GUI. </p>
-                    </div>
-                    <div class="feature-image">
-                        <img src="images/folder.png" alt="Feature Image">
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-<footer class="main-footer">
+<section class="content-section animate-on-scroll">
     <div class="container">
-        <div class="footer-content">
-            <div class="footer-column">
-                <a href="/index" class="logo-footer">
-                    <img src="images/logo-white.png" alt="Jacent Labs Logo">
-                    Jacent Labs
-                </a>
-                <p class="footer-tagline">DNA made easy.</p>
+        <h2>Our Approach</h2>
+        <div class="grid">
+            <div class="grid-item">
+                <h3>Discover</h3>
+                <p>Identify novel approaches to predict disease, allowing you to unearth <b>critical motifs</b> and hidden <b>regulatory elements</b> 
+                    in your genomic sequences. Go from raw data to actionable biological insights with <b>unparalleled speed </b>and <b>precision</b>.</p>
             </div>
-
-            <div class="footer-column">
-                <h4>Explore</h4>
-                <ul class="footer-links">
-                    <li><a href="/software">Software</a></li>
-                    <li><a href="/investments">Investments</a></li>
-                    <li><a href="/about">About Us</a></li>
-                </ul>
+            <div class="grid-item">
+                <h3>Develop</h3>
+                <p>Our dream is continuously develop a comprehensive <b>end-to-end analysis pipeline</b> for analysing genomic data, supporting you to build robust 
+                    <b>hypotheses</b> supported by <b>powerful algorithms</b>, <b>detailed exports</b>, and an intuitive, <b>graphical interface</b>.</p>
             </div>
-
-            <div class="footer-column">
-                <h4>Contact</h4>
-                <ul class="footer-links">
-                    <li><a href="mailto:contact@jacentlabs.com">contact@jacentlabs.com</a></li>
-                    </ul>
+            <div class="grid-item">
+                <h3>Deploy</h3>
+                <p>Comprehensive analysis gives you the power to seamlessly integrate your findings into <b>existing research workflows</b>, accelerating discoveries 
+                    and translating them into tangible progress in <b>genomics</b>, <b>gene therapy</b>, and <b>personalized medicine</b>. </p>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Jacent Labs Ltd. All Rights Reserved.</p>
         </div>
     </div>
-</footer>
+</section>
 
-    <script src="js/script.js"></script>
-    <script src="js/starfield.js"></script>
-    <script src="js/home-header.js"></script>
-</body>
-</html>
+<section class="content-section bg-light animate-on-scroll">
+    <div class="container">
+        <h2>Key Features</h2>
+        <div class="feature-row">
+            <div class="feature-text">
+                <h3>Motif Analysis</h3>
+                <p>Scan for <b>Microsatellites, Palindromes, G-Quadruplexes, CpG Islands</b>, and <b>Custom Sequences</b>. <br>Compare Categories. No limit to genetic sequence count.</p>
+            </div>
+            <div class="feature-image">
+                <img src="images/analysis.png" alt="Feature Image">
+            </div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-text">
+                <h3>API Integration</h3>
+                <p><b>NCBI Entrez API</b> attached, allowing on the fly gene analysis. Pulls gene data from Genomic Sequence ID, e.g., NC_045512.2.
+                    <br>AI LLM API inclusion, allowing for quick genomic questions.
+                </p>
+            </div>
+            <div class="feature-image">
+                <img src="images/ncbi.png" alt="Feature Image">
+            </div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-text">
+                <h3>File Flexibility</h3>
+                <p>Data can be easily <b>extracted</b> into <b>.csv</b> format. <br>Custom Motif files can be <b>uploaded</b>, alongside being created within the GUI. </p>
+            </div>
+            <div class="feature-image">
+                <img src="images/folder.png" alt="Feature Image">
+            </div>
+        </div>
+    </div>
+</section>
