@@ -299,6 +299,49 @@ main {
     margin: 0;
 }
 
+/* SOFTWARE SHOWCASE STYLES */
+
+.software-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* Space between each image section */
+    margin-top: 20px;
+}
+
+.showcase-item {
+    text-align: center;
+}
+
+.showcase-img {
+    width: 100%;             /* Ensures image fits container width */
+    height: auto;            /* Maintains aspect ratio */
+    border-radius: 12px;     /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* drop shadow */
+    border: 1px solid rgba(0,0,0,0.05); /* border for definition */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* lift effect when hovering over the image */
+.showcase-img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.caption {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #555;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+    .caption { color: #aaa; }
+    .showcase-img { border: 1px solid rgba(255,255,255,0.1); }
+}
+
 /* MEDIA */
 
 @media (max-width: 900px) {
