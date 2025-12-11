@@ -154,26 +154,12 @@ main {
 .main-header.scrolled .logo-white { opacity: 0; }
 
 /* ===============EXCEL EMBED=================== */
+/* Center the iframe horizontally */
 .iframe-center {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-.iframe-center iframe {
-    /* Default desktop styles */
-    width: 1160px; 
-    height: 505px;
-    max-width: 100%; /* Ensures it never overflows the screen width */
-}
-
-/* Mobile-specific overrides */
-@media (max-width: 900px) {
-    .iframe-center iframe {
-        width: 100%; /* Forces full width on mobile */
-        height: 300px; 
-    }
 }
 
 /* ================================== */
