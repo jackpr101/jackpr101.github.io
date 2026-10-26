@@ -342,6 +342,126 @@ main {
     .showcase-img { border: 1px solid rgba(255,255,255,0.1); }
 }
 
+/* SMALL THINGS APP PAGES */
+
+.smallthings-section {
+    padding: 100px 0 40px;
+}
+
+.smallthings-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.smallthings-section a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.smallthings-section a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.smallthings-support {
+    text-align: center;
+}
+
+.smallthings-support h1 {
+    font-size: 3rem;
+    margin: 0 0 12px;
+    line-height: 1.2;
+}
+
+.smallthings-tagline {
+    font-size: 1.2rem;
+    color: #555;
+    margin: 0 auto 40px;
+}
+
+.smallthings-card {
+    background-color: #f9f9f9;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: left;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+.smallthings-card h2 {
+    font-size: 1.25rem;
+    margin: 0 0 10px;
+}
+
+.smallthings-card p {
+    margin: 0 0 16px;
+}
+
+.smallthings-card p:last-child {
+    margin-bottom: 0;
+}
+
+.smallthings-links {
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.smallthings-policy h1 {
+    font-size: 2rem;
+    margin: 0 0 6px;
+    line-height: 1.25;
+}
+
+.smallthings-policy .updated {
+    color: #666;
+    margin: 0 0 24px;
+    font-size: 0.95rem;
+}
+
+.smallthings-policy .summary {
+    background-color: #f9f9f9;
+    border-left: 4px solid #007bff;
+    border-radius: 0 6px 6px 0;
+    padding: 14px 20px;
+    margin: 24px 0 32px;
+}
+
+.smallthings-policy .summary p {
+    margin: 0;
+}
+
+.smallthings-policy h2 {
+    font-size: 1.25rem;
+    margin: 32px 0 8px;
+}
+
+.smallthings-policy p {
+    margin: 0 0 16px;
+}
+
+.smallthings-policy ul {
+    margin: 8px 0 16px;
+    padding-left: 24px;
+}
+
+.smallthings-policy li {
+    margin: 6px 0;
+}
+
+@media (max-width: 600px) {
+    .smallthings-support h1 {
+        font-size: 2.25rem;
+    }
+    .smallthings-policy h1 {
+        font-size: 1.75rem;
+    }
+    .smallthings-card {
+        padding: 24px 20px;
+    }
+}
+
 /* MEDIA */
 
 @media (max-width: 900px) {
