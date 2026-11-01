@@ -30,8 +30,8 @@ main {
     padding: 0 20px;
 }
 
-/* Style for elements before they are animated */
-.animate-on-scroll {
+/* Style for elements before they are animated (home-header.js adds animate-ready) */
+.animate-on-scroll.animate-ready {
     opacity: 0;
     transform: translateY(100px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -153,15 +153,6 @@ main {
 .main-header.scrolled .logo-default { opacity: 1; }
 .main-header.scrolled .logo-white { opacity: 0; }
 
-/* ===============EXCEL EMBED=================== */
-/* Center the iframe horizontally */
-.iframe-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
 /* ================================== */
 /* HERO & CONTENT SECTIONS            */
 /* ================================== */
@@ -226,6 +217,7 @@ main {
 .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
 .form-group textarea { resize: vertical; }
+.hp-field { display: none !important; }
 
 
 /* FOOTER */
@@ -334,12 +326,6 @@ main {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-}
-
-/* Dark mode compatibility */
-@media (prefers-color-scheme: dark) {
-    .caption { color: #aaa; }
-    .showcase-img { border: 1px solid rgba(255,255,255,0.1); }
 }
 
 /* SMALL THINGS APP PAGES */
@@ -475,8 +461,8 @@ main {
     .hamburger-menu.active .hamburger-bar:nth-child(2) { opacity: 0; }
     .hamburger-menu.active .hamburger-bar:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
     .grid { grid-template-columns: 1fr; }
-    .feature-row { flex-direction: column; }
-    .feature-text {padding-right: 60px;}
+    .feature-row { flex-direction: column; gap: 24px; }
+    .feature-text { padding-left: 0; }
     .main-header.scrolled .main-nav {
         background-color: rgba(255,255,255,0.95);
     }

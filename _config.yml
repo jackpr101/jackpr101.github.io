@@ -1,0 +1,4 @@
+# Files kept in the repo but not published to the website.
+exclude:
+  - server.js
+  - package.json

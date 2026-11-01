@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const navMenu = document.querySelector('.main-nav');
 
     hamburger.addEventListener('click', function() {
-        navMenu.classList.toggle('active');
+        const isOpen = navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', String(isOpen));
+        hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
     });
 });

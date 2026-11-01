@@ -1,19 +1,18 @@
 <header class="main-header {% unless page.url == '/' or page.url == '/index.html' %}scrolled{% endunless %}">
     <div class="container">
         <a href="/" class="logo">
-            <img src="/images/logo.png" alt="Jacent Labs Logo" class="logo-image logo-default">
-            <img src="/images/logo-white.png" alt="Jacent Labs Logo" class="logo-image logo-white">
+            <img src="/images/logo.png" alt="" class="logo-image logo-default">
+            <img src="/images/logo-white.png" alt="" class="logo-image logo-white">
             Jacent Labs
         </a>
-        <nav class="main-nav">
+        <nav class="main-nav" id="main-nav">
             <ul>
                 <li><a href="/software">Software</a></li>
-                <li><a href="/investments">Investments</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
-        <button class="hamburger-menu">
+        <button class="hamburger-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>

@@ -34,9 +34,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }, {
-        threshold: 0.2 // Trigger when 10% of the element is visible
+        rootMargin: '0px 0px -10% 0px' // Trigger once the element's top is 10% up the screen, however tall it is
     });
 
     const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
-    elementsToAnimate.forEach(el => observer.observe(el));
+    // Sections are only hidden here, so they stay visible if this script never runs.
+    elementsToAnimate.forEach(el => {
+        el.classList.add('animate-ready');
+        observer.observe(el);
+    });
 });
