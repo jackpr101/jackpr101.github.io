@@ -4,19 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const codeInput = document.getElementById('parent-code');
     const codeErrorEl = document.getElementById('code-error');
-    const notesInput = document.getElementById('parent-notes');
     const slotButtons = Array.from(form.querySelectorAll('.slot-btn'));
     const clearBtn = document.getElementById('clear-slots-btn');
     const summaryEl = document.getElementById('selection-summary');
     const errorEl = document.getElementById('timetable-error');
     const submitBtn = document.getElementById('timetable-submit-btn');
 
-    const confirmationEl = document.getElementById('timetable-confirmation');
-    const confirmCodeEl = document.getElementById('confirm-code');
-    const confirmSlotsEl = document.getElementById('confirm-slots');
-    const confirmNotesWrap = document.getElementById('confirm-notes-wrap');
-    const confirmNotesEl = document.getElementById('confirm-notes');
-    const submitAnotherBtn = document.getElementById('submit-another-btn');
+    const hiddenSubject = document.getElementById('hidden-subject');
+    const hiddenTotal = document.getElementById('hidden-total');
+    const hiddenSlots = document.getElementById('hidden-slots');
 
     const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const VALID_CODES = new Set([
@@ -104,20 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSubmitState();
     });
 
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+    form.addEventListener('submit', (event) => {
         clearError();
 
         const code = codeInput.value.trim();
         const selected = getSelectedSlots();
-        const notes = notesInput.value.trim();
 
         if (!code) {
+            event.preventDefault();
             clearCodeError();
             return;
         }
 
         if (!VALID_CODES.has(code)) {
+            event.preventDefault();
             codeErrorEl.hidden = false;
             codeInput.classList.add('is-invalid');
             codeInput.focus();
@@ -127,87 +123,33 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCodeError();
 
         if (selected.length === 0) {
+            event.preventDefault();
             showError('Please select at least one time slot that works for you.');
             return;
         }
 
-        const payload = {
-            _subject: `Availability - ${code}`,
-            code: code,
-            total_slots_selected: selected.length,
-            selected_slots: selected.map(s => s.label).join(', ')
-        };
+        // Normalize trimmed code and populate hidden fields for standard Formspree POST
+        codeInput.value = code;
+        hiddenSubject.value = `Availability - ${code}`;
+        hiddenTotal.value = String(selected.length);
+        hiddenSlots.value = selected.map(s => s.label).join(', ');
 
         DAYS.forEach(day => {
-            const dayTimes = selected.filter(s => s.day === day).map(s => s.time);
-            payload[day.toLowerCase()] = dayTimes.length > 0 ? dayTimes.join(', ') : 'None';
+            const dayEl = document.getElementById(`hidden-${day.toLowerCase()}`);
+            if (dayEl) {
+                const dayTimes = selected.filter(s => s.day === day).map(s => s.time);
+                dayEl.value = dayTimes.length > 0 ? dayTimes.join(', ') : 'None';
+            }
         });
-
-        if (notes) {
-            payload.notes = notes;
-        }
-
-        const gotcha = form.querySelector('input[name="_gotcha"]');
-        if (gotcha && gotcha.value) {
-            payload._gotcha = gotcha.value;
-        }
 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
-
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                let errMsg = 'Something went wrong while sending your availability. Please try again.';
-                try {
-                    const data = await response.json();
-                    if (data && Array.isArray(data.errors) && data.errors.length > 0) {
-                        errMsg = data.errors.map(e => e.message).join(' ');
-                    }
-                } catch (_) {
-                    // Ignore JSON parse error
-                }
-                throw new Error(errMsg);
-            }
-
-            confirmCodeEl.textContent = code;
-            confirmSlotsEl.innerHTML = '';
-            selected.forEach(slot => {
-                const li = document.createElement('li');
-                li.textContent = slot.label;
-                confirmSlotsEl.appendChild(li);
-            });
-
-            if (notes) {
-                confirmNotesEl.textContent = notes;
-                confirmNotesWrap.hidden = false;
-            } else {
-                confirmNotesWrap.hidden = true;
-            }
-
-            form.hidden = true;
-            confirmationEl.hidden = false;
-            confirmationEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } catch (err) {
-            showError(err.message || 'Could not send your availability. Please check your connection and try again.');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit Availability';
-            updateSubmitState();
-        }
     });
 
-    submitAnotherBtn.addEventListener('click', () => {
-        confirmationEl.hidden = true;
-        form.hidden = false;
-        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Reset button state if user navigates back via browser history
+    window.addEventListener('pageshow', () => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Availability';
+        updateSubmitState();
     });
 });

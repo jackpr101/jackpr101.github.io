@@ -7,10 +7,6 @@ body_class: timetable-page
 <section class="timetable-section">
     <canvas id="starfield"></canvas>
     <div class="timetable-container">
-        <div class="timetable-header">
-            <h1>Availability</h1>
-        </div>
-
         <form id="timetable-form" class="timetable-card" action="https://formspree.io/f/xdkwgvew" method="POST" novalidate>
             <div class="timetable-step">
                 <label for="parent-code" class="timetable-label">1. Your Code</label>
@@ -18,7 +14,7 @@ body_class: timetable-page
                 <input
                     type="text"
                     id="parent-code"
-                    name="parent_code"
+                    name="code"
                     class="timetable-input"
                     autocomplete="off"
                     required
@@ -98,6 +94,14 @@ body_class: timetable-page
                 ></textarea>
             </div>
 
+            <input type="hidden" name="_subject" id="hidden-subject">
+            <input type="hidden" name="total_slots_selected" id="hidden-total">
+            <input type="hidden" name="selected_slots" id="hidden-slots">
+            <input type="hidden" name="monday" id="hidden-monday">
+            <input type="hidden" name="tuesday" id="hidden-tuesday">
+            <input type="hidden" name="wednesday" id="hidden-wednesday">
+            <input type="hidden" name="thursday" id="hidden-thursday">
+            <input type="hidden" name="friday" id="hidden-friday">
             <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off">
 
             <div id="timetable-error" class="timetable-alert timetable-alert-error" role="alert" hidden></div>
@@ -106,19 +110,6 @@ body_class: timetable-page
                 Submit Availability
             </button>
         </form>
-
-        <div id="timetable-confirmation" class="timetable-card timetable-confirmation" hidden>
-            <div class="confirmation-icon" aria-hidden="true">&#10003;</div>
-            <h2>Availability Sent!</h2>
-            <p>Thank you. Your availability has been saved and sent so the weekly timetable can be put together.</p>
-            <div class="confirmation-details">
-                <p><strong>Code:</strong> <span id="confirm-code"></span></p>
-                <p><strong>Selected Slots:</strong></p>
-                <ul id="confirm-slots"></ul>
-                <p id="confirm-notes-wrap" hidden><strong>Notes:</strong> <span id="confirm-notes"></span></p>
-            </div>
-            <button type="button" id="submit-another-btn" class="timetable-secondary-btn">Edit or submit again</button>
-        </div>
     </div>
 </section>
 
