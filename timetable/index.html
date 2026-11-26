@@ -1,0 +1,126 @@
+---
+layout: minimal
+title: Availability - Jacent Labs
+description: Select the weekly time slots that work for you.
+body_class: timetable-page
+---
+<section class="timetable-section">
+    <canvas id="starfield"></canvas>
+    <div class="timetable-container">
+        <div class="timetable-header">
+            <h1>Availability</h1>
+        </div>
+
+        <form id="timetable-form" class="timetable-card" action="https://formspree.io/f/xdkwgvew" method="POST" novalidate>
+            <div class="timetable-step">
+                <label for="parent-code" class="timetable-label">1. Your Code</label>
+                <p class="timetable-hint">Type the code that was sent to you.</p>
+                <input
+                    type="text"
+                    id="parent-code"
+                    name="parent_code"
+                    class="timetable-input"
+                    autocomplete="off"
+                    required
+                >
+                <p id="code-error" class="timetable-code-error" role="alert" hidden>Invalid code</p>
+            </div>
+
+            <div class="timetable-step">
+                <div class="timetable-step-header">
+                    <div>
+                        <span class="timetable-label">2. Select Available Time Slots</span>
+                        <p class="timetable-hint">Click to toggle each 1-hour slot you are available for.</p>
+                    </div>
+                    <button type="button" id="clear-slots-btn" class="timetable-clear-btn" hidden>Clear all</button>
+                </div>
+
+                <div class="slot-grid" role="group" aria-label="Weekly time slots">
+                    <div class="slot-grid-corner" aria-hidden="true"></div>
+                    <div class="slot-time-heading">5:30 – 6:30 PM</div>
+                    <div class="slot-time-heading">6:45 – 7:45 PM</div>
+
+                    <div class="slot-day-label">Monday</div>
+                    <button type="button" class="slot-btn" data-day="Monday" data-time="5:30–6:30 PM" aria-pressed="false">
+                        <span class="slot-btn-time">5:30 – 6:30 PM</span>
+                    </button>
+                    <button type="button" class="slot-btn" data-day="Monday" data-time="6:45–7:45 PM" aria-pressed="false">
+                        <span class="slot-btn-time">6:45 – 7:45 PM</span>
+                    </button>
+
+                    <div class="slot-day-label">Tuesday</div>
+                    <button type="button" class="slot-btn" data-day="Tuesday" data-time="5:30–6:30 PM" aria-pressed="false">
+                        <span class="slot-btn-time">5:30 – 6:30 PM</span>
+                    </button>
+                    <button type="button" class="slot-btn" data-day="Tuesday" data-time="6:45–7:45 PM" aria-pressed="false">
+                        <span class="slot-btn-time">6:45 – 7:45 PM</span>
+                    </button>
+
+                    <div class="slot-day-label">Wednesday</div>
+                    <button type="button" class="slot-btn" data-day="Wednesday" data-time="5:30–6:30 PM" aria-pressed="false">
+                        <span class="slot-btn-time">5:30 – 6:30 PM</span>
+                    </button>
+                    <button type="button" class="slot-btn" data-day="Wednesday" data-time="6:45–7:45 PM" aria-pressed="false">
+                        <span class="slot-btn-time">6:45 – 7:45 PM</span>
+                    </button>
+
+                    <div class="slot-day-label">Thursday</div>
+                    <button type="button" class="slot-btn" data-day="Thursday" data-time="5:30–6:30 PM" aria-pressed="false">
+                        <span class="slot-btn-time">5:30 – 6:30 PM</span>
+                    </button>
+                    <button type="button" class="slot-btn" data-day="Thursday" data-time="6:45–7:45 PM" aria-pressed="false">
+                        <span class="slot-btn-time">6:45 – 7:45 PM</span>
+                    </button>
+
+                    <div class="slot-day-label">Friday</div>
+                    <button type="button" class="slot-btn" data-day="Friday" data-time="5:30–6:30 PM" aria-pressed="false">
+                        <span class="slot-btn-time">5:30 – 6:30 PM</span>
+                    </button>
+                    <button type="button" class="slot-btn" data-day="Friday" data-time="6:45–7:45 PM" aria-pressed="false">
+                        <span class="slot-btn-time">6:45 – 7:45 PM</span>
+                    </button>
+                </div>
+
+                <div id="selection-summary" class="selection-summary" aria-live="polite">
+                    No slots selected yet.
+                </div>
+            </div>
+
+            <div class="timetable-step">
+                <label for="parent-notes" class="timetable-label">3. Notes <span class="timetable-optional">(optional)</span></label>
+                <p class="timetable-hint">Let me know if you have a preferred day or anything else I should keep in mind.</p>
+                <textarea
+                    id="parent-notes"
+                    name="notes"
+                    class="timetable-textarea"
+                    rows="3"
+                    placeholder="e.g. Tuesday is our first choice, but any selected slot works."
+                ></textarea>
+            </div>
+
+            <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off">
+
+            <div id="timetable-error" class="timetable-alert timetable-alert-error" role="alert" hidden></div>
+
+            <button type="submit" id="timetable-submit-btn" class="btn timetable-submit-btn is-disabled" aria-disabled="true">
+                Submit Availability
+            </button>
+        </form>
+
+        <div id="timetable-confirmation" class="timetable-card timetable-confirmation" hidden>
+            <div class="confirmation-icon" aria-hidden="true">&#10003;</div>
+            <h2>Availability Sent!</h2>
+            <p>Thank you. Your availability has been saved and sent so the weekly timetable can be put together.</p>
+            <div class="confirmation-details">
+                <p><strong>Code:</strong> <span id="confirm-code"></span></p>
+                <p><strong>Selected Slots:</strong></p>
+                <ul id="confirm-slots"></ul>
+                <p id="confirm-notes-wrap" hidden><strong>Notes:</strong> <span id="confirm-notes"></span></p>
+            </div>
+            <button type="button" id="submit-another-btn" class="timetable-secondary-btn">Edit or submit again</button>
+        </div>
+    </div>
+</section>
+
+<script src="/js/starfield.js"></script>
+<script src="/js/timetable.js"></script>
